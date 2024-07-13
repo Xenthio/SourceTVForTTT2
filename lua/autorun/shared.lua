@@ -6,22 +6,22 @@ if (SERVER) then
             --if not ply:IsSpec() then
             --    ply:Kill()
             --end
-
+    
             GAMEMODE:PlayerSpawnAsSpectator(ply)
-
+    
             ply:SetTeam(TEAM_SPEC)
             ply:SetForceSpec(true)
             ply:Spawn()
-
-            ply:SetRagdollSpec(false) -- dying will enable this, we don't want it here
+            ply.isReady = false
+            ply:SetRagdollSpec(false) -- dying will enable this, we don't want it here 
         end
-    end
-    hook.Add( "TTTBeginRound", "SourceTVFix", function()
+    end 
+    
+    hook.Add( "TTTPrepareRound", "SourceTVFix", function()
         for k,v in pairs(player.GetAll()) do
             TryFixup(v)
         end
     end )
-    
     --for k,v in pairs(player.GetAll()) do
     --    TryFixup(v)
     --end
