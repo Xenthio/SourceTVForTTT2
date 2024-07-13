@@ -16,13 +16,22 @@ if (SERVER) then
             ply:SetRagdollSpec(false) -- dying will enable this, we don't want it here
         end
     end
-    hook.Add( "TTTBeginRound", "SourceTVFix", function( ply )
+    hook.Add( "TTTBeginRound", "SourceTVFix", function()
         for k,v in pairs(player.GetAll()) do
             TryFixup(v)
         end
     end )
+    
     --for k,v in pairs(player.GetAll()) do
     --    TryFixup(v)
     --end
     print("[Source TV TTT] - Source TV fixes is active and initialised!")
+end
+if (CLIENT) then
+     
+    hook.Add( "TTTScoreGroup", "SourceTVHidePlayer", function( ply )
+        if ply:Nick() == GetConVar("tv_name"):GetString() then
+            return 99
+        end
+    end )
 end
