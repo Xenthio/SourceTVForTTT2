@@ -1,5 +1,5 @@
 if (SERVER) then
-    RunConsoleCommand("tv_enable" 1)
+    RunConsoleCommand("tv_enable", 1)
     function TryFixup(ply)
         --print("[Source TV TTT] [Debug] - Attempting to fix " .. ply:Nick() .. ". (checking for " .. GetConVar("tv_name"):GetString() .. ")")  
         if ply:Nick() == GetConVar("tv_name"):GetString() then
@@ -23,8 +23,8 @@ if (SERVER) then
             TryFixup(v)
         end
     end )
-    hook.Add( "PlayerConnect", "SourceTVFixPlayerJoin", function( name, ip)
-        if name != GetConVar("tv_name"):GetString() then
+    hook.Add( "PlayerInitialSpawn", "SourceTVFixPlayerJoin", function( ply )
+        if ply:Nick() != GetConVar("tv_name"):GetString() then
             name = os.date( "%d-%m-%Y-at-%H-%M" , Timestamp ) .. "-on-" .. game.GetMap()
             RunConsoleCommand("tv_record", "replays/" .. name)
             RunConsoleCommand("tv_record", name)
