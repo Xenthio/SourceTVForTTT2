@@ -22,10 +22,16 @@ if (SERVER) then
             TryFixup(v)
         end
     end )
-
+    hook.Add( "PlayerConnect", "SourceTVFixPlayerJoin", function()
+        name = os.date( "%H-%M-%d-%m-%Y" , Timestamp ) .. "--" .. game.GetMap()
+        RunConsoleCommand("tv_record", name)
+        print("[Source TV TTT] - Started recording to " .. name)  
+    end )
+    --RunConsoleCommand("tv_record", os.date( "%H-%M-%d-%m-%Y" , Timestamp )
     hook.Add( "PlayerDisconnected", "SourceTVFixPlayerLeft", function()
         if table.Count(player.GetAll()) == 0 then
             RunConsoleCommand("tv_stoprecord")
+            print("[Source TV TTT] - Stopped recording")  
         end
     end )
     --for k,v in pairs(player.GetAll()) do
