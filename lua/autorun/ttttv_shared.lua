@@ -1,4 +1,5 @@
 if (SERVER) then
+    RunConsoleCommand("tv_enable" 1)
     function TryFixup(ply)
         --print("[Source TV TTT] [Debug] - Attempting to fix " .. ply:Nick() .. ". (checking for " .. GetConVar("tv_name"):GetString() .. ")")  
         if ply:Nick() == GetConVar("tv_name"):GetString() then
@@ -22,14 +23,18 @@ if (SERVER) then
             TryFixup(v)
         end
     end )
-    hook.Add( "PlayerConnect", "SourceTVFixPlayerJoin", function()
-        name = os.date( "%H-%M-%d-%m-%Y" , Timestamp ) .. "--" .. game.GetMap()
-        RunConsoleCommand("tv_record", name)
-        print("[Source TV TTT] - Started recording to " .. name)  
+    hook.Add( "PlayerConnect", "SourceTVFixPlayerJoin", function( name, ip)
+        if name != GetConVar("tv_name"):GetString() then
+            name = os.date( "%d-%m-%Y-at-%H-%M" , Timestamp ) .. "-on-" .. game.GetMap()
+            RunConsoleCommand("tv_record", "replays/" .. name)
+            RunConsoleCommand("tv_record", name)
+            print("[Source TV TTT] - Started recording to " .. name)   
+        end
     end )
     --RunConsoleCommand("tv_record", os.date( "%H-%M-%d-%m-%Y" , Timestamp )
     hook.Add( "PlayerDisconnected", "SourceTVFixPlayerLeft", function()
-        if table.Count(player.GetAll()) == 0 then
+        count = table.Count(player.GetAll())
+        if table.Count(player.GetAll()) <= 2 then
             RunConsoleCommand("tv_stoprecord")
             print("[Source TV TTT] - Stopped recording")  
         end
