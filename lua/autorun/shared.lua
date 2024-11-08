@@ -1,6 +1,6 @@
 if (SERVER) then
     function TryFixup(ply)
-        print("[Source TV TTT] [Debug] - Attempting to fix " .. ply:Nick() .. ". (checking for " .. GetConVar("tv_name"):GetString() .. ")")  
+        --print("[Source TV TTT] [Debug] - Attempting to fix " .. ply:Nick() .. ". (checking for " .. GetConVar("tv_name"):GetString() .. ")")  
         if ply:Nick() == GetConVar("tv_name"):GetString() then
             print("[Source TV TTT] - Forcing SourceTV into spectator")  
             --if not ply:IsSpec() then
@@ -20,6 +20,12 @@ if (SERVER) then
     hook.Add( "TTTPrepareRound", "SourceTVFix", function()
         for k,v in pairs(player.GetAll()) do
             TryFixup(v)
+        end
+    end )
+
+    hook.Add( "PlayerDisconnected", "SourceTVFixPlayerLeft", function()
+        if table.Count(player.GetAll()) == 0 then
+            RunConsoleCommand("tv_stoprecord")
         end
     end )
     --for k,v in pairs(player.GetAll()) do
