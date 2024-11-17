@@ -1,4 +1,4 @@
-if (SERVER) then
+if (SERVER && engine.ActiveGamemode() == "terrortown") then
     RunConsoleCommand("tv_enable", 1)
     function TryFixup(ply)
         --print("[Source TV TTT] [Debug] - Attempting to fix " .. ply:Nick() .. ". (checking for " .. GetConVar("tv_name"):GetString() .. ")")  
@@ -44,7 +44,7 @@ if (SERVER) then
     --end
     print("[Source TV TTT] - Source TV fixes is active and initialised!")
 end
-if (CLIENT) then
+if (CLIENT && engine.ActiveGamemode() == "terrortown") then
      
     hook.Add( "TTTScoreGroup", "SourceTVHidePlayer", function( ply )
         if ply:Nick() == GetConVar("tv_name"):GetString() then
