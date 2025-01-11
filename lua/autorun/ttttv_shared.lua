@@ -45,7 +45,7 @@ if (SERVER && engine.ActiveGamemode() == "terrortown") then
     print("[Source TV TTT] - Source TV fixes is active and initialised!")
 end
 if (CLIENT && engine.ActiveGamemode() == "terrortown") then
-     
+    include( "demoplayer.lua" )
     hook.Add( "TTTScoreGroup", "SourceTVHidePlayer", function( ply )
         if ply:Nick() == GetConVar("tv_name"):GetString() then
             return 99
