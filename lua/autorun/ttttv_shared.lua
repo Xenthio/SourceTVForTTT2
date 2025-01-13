@@ -1,5 +1,6 @@
-if (SERVER && engine.ActiveGamemode() == "terrortown") then
+if (SERVER && engine.ActiveGamemode() == "terrortown" && game.MaxPlayers() > 1) then
     RunConsoleCommand("tv_enable", 1)
+    local shouldBeRecording = false
     function TryFixup(ply)
         --print("[Source TV TTT] [Debug] - Attempting to fix " .. ply:Nick() .. ". (checking for " .. GetConVar("tv_name"):GetString() .. ")")  
         if ply:Nick() == GetConVar("tv_name"):GetString() then
@@ -24,8 +25,9 @@ if (SERVER && engine.ActiveGamemode() == "terrortown") then
         end
     end )
     hook.Add( "PlayerInitialSpawn", "SourceTVFixPlayerJoin", function( ply )
-        if ply:Nick() != GetConVar("tv_name"):GetString() then
+        if (ply:Nick() != GetConVar("tv_name"):GetString() && not shouldBeRecording) then
             name = os.date( "%d-%m-%Y-at-%H-%M" , Timestamp ) .. "-on-" .. game.GetMap()
+            RunConsoleCommand("tv_record", "data/replays/" .. name)
             RunConsoleCommand("tv_record", "replays/" .. name)
             RunConsoleCommand("tv_record", name)
             print("[Source TV TTT] - Started recording to " .. name)   
@@ -33,6 +35,7 @@ if (SERVER && engine.ActiveGamemode() == "terrortown") then
     end )
     --RunConsoleCommand("tv_record", os.date( "%H-%M-%d-%m-%Y" , Timestamp )
     hook.Add( "PlayerDisconnected", "SourceTVFixPlayerLeft", function()
+        shouldBeRecording = false
         count = table.Count(player.GetAll())
         if table.Count(player.GetAll()) <= 2 then
             RunConsoleCommand("tv_stoprecord")
